@@ -7,20 +7,50 @@ to make a reproducible scientific project named
 
 It is authored by G Jake Gebbie.
 
-To (locally) reproduce this project, do the following:
+## Steps to run the code
 
-0. Download this code base. Notice that raw data are typically not included in the
-   git-history and may need to be downloaded independently.
-1. Open a Julia console and do:
-   ```
-   julia> using Pkg
-   julia> Pkg.add("DrWatson") # install globally, for using `quickactivate`
-   julia> Pkg.activate("path/to/this/project")
-   julia> Pkg.instantiate()
-   ```
+0. Download this code base using git. Notice that raw data are typically not included in the git-history and may need to be downloaded independently.
+```sh
+git clone https://github.com/ggebbie/WaterMassesByTMI
+```
 
-This will install all necessary packages for you to be able to run the scripts and
-everything should work out of the box, including correctly finding local paths.
+1. Download Julia. For MacOSX and Linux, I recommend using `juliaup`.
+
+```sh
+curl -fsSL https://install.julialang.org | sh
+juliaup add 1.9.0
+juliaup default 1.9.0
+```
+
+2. Open the REPL, e.g.:
+- Use a terminal and type `julia`
+- Use VirtualStudio Code and the julia extension.
+- Use `julia-repl` or `julia-snail` packages in Emacs.
+
+3. (First time only): Install DrWatson.jl in your default (i.e., "v1.9") environment:
+```julia
+import Pkg; Pkg.add("DrWatson.jl")
+```
+
+4. (First time only:) Set up the WaterMassesByTMI environment.
+```julia
+cd("WaterMassesByTMI") # modify this to navigate to the directory containing this project
+Pkg.activate(".")
+Pkg.instantiate()
+```
+
+This will install all necessary packages for you to be able to run the
+scripts and everything should work out of the box, including correctly
+finding local paths.
+
+5. Make any necessary changes to the configuration file at `WaterMassesByTMI/scripts/config_watermasses.jl`.
+Here you can specify the input file name and the TMI version.
+
+6. Put a data file (CSV format) into the data directory at `WaterMassesByTMI/data`.
+
+7. Run it.
+
+## More information
 
 You may notice that most scripts start with the commands:
 ```julia
