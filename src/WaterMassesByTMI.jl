@@ -62,7 +62,7 @@ function watermassdiags_at_locs(TMIversion,filename)
     
     # write output
     ## CHANGE TO XLSX FORMAT
-    isfile(fn) && mv(fn,fn*"1")
+    isfile(fn) && mv(fn,fn*"1",force=true)
     XLSX.writetable(fn,hcat(df,DataFrame(output)))
     println("write XLSX output")
     
@@ -87,23 +87,6 @@ function read_locs(df::DataFrame)
         locs[ii] = (df[:,:Longitude][ii],df[:,:Latitude][ii],df[:,:Depth][ii])
     end
     return locs
-end
-
-"""
-    function tracerlist()
-
-    Return list of tracers 
-"""
-function tracerlist(TMIfile)
-    nc = NCDataset(TMIfile)
-    list = Vector{String}(undef,0)
-    for (k,v) in nc
-        if startswith(k,"σ")
-            # σ is 2-units
-            push!(list,k[3:end])
-        end
-    end
-    return list            
 end
 
 """
