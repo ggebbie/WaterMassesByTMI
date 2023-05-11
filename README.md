@@ -29,7 +29,7 @@ juliaup default 1.9.0
 
 3. (First time only): Install DrWatson.jl in your default (i.e., "v1.9") environment:
 ```julia
-import Pkg; Pkg.add("DrWatson.jl")
+import Pkg; Pkg.add("DrWatson")
 ```
 
 4. (First time only:) Set up the WaterMassesByTMI environment.
@@ -46,9 +46,12 @@ finding local paths.
 5. Make any necessary changes to the configuration file at `WaterMassesByTMI/scripts/config_watermasses.jl`.
 Here you can specify the input file name and the TMI version.
 
-6. Put a data file (CSV format) into the data directory at `WaterMassesByTMI/data`.
+6. Put a data file (currently requires xlsx format) into the data directory at `WaterMassesByTMI/data`.
 
-7. Run it.
+7. Run it interactively (or run it in batch mode in 8.)
+
+8. Or run it in batch mode.
+
 
 ## More information
 
