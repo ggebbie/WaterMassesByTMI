@@ -1,6 +1,6 @@
 module WaterMassesByTMI
 
-using DrWatson, Interpolations, TMI, DataFrames, NCDatasets
+using DrWatson, Interpolations, TMI, DataFrames, NCDatasets, XLSX
 
 export watermassdiags_at_locs, watermasslist, watermasssymbols, versionlist, read_locs
 export watermassdistribution, tracerlist
@@ -10,7 +10,7 @@ export watermassdistribution, tracerlist
 
     A suite of water-mass diagnostics at the coresites
 """
-function watermassdiags_at_locs(TMIversion)
+function watermassdiags_at_locs(TMIversion,filename)
 
     println(TMIversion)
     A, Alu, γ, TMIfile, L, B = config_from_nc(TMIversion);
@@ -39,7 +39,7 @@ function watermassdiags_at_locs(TMIversion)
 
         # put three lines together. not sure it helps much. (less readable).
         push!(output, wm*wmunits =>
-            100*observe(watermassdistribution(TMIversion,Alu,wm,γ),locs,γ))
+            100*observe(TMI.watermassdistribution(TMIversion,Alu,wm,γ),locs,γ))
     end
 
     # find all of the tracers in the TMI version, observe them at core locations.

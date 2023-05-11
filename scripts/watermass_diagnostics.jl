@@ -8,10 +8,10 @@ including the mean or ideal age and water-mass fractions.
 include("intro.jl")
 
 using Revise
-using TMI
-using DataFrames
-using DrWatson
-using XLSX
+# using TMI
+# using DataFrames
+# using DrWatson
+# using XLSX
 
 include(scriptsdir("config_watermass_diagnostics.jl"))
 
@@ -22,4 +22,4 @@ include(scriptsdir("config_watermass_diagnostics.jl"))
 
 #map(watermassdiags_at_locs,dicts)
 
-watermassdiags_at_locs(TMIversion)
+watermassdiags_at_locs(TMIversion,inputfile)
