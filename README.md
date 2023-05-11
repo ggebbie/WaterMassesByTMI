@@ -43,7 +43,7 @@ This will install all necessary packages for you to be able to run the
 scripts and everything should work out of the box, including correctly
 finding local paths.
 
-5. Make any necessary changes to the configuration file at `WaterMassesByTMI/scripts/config_watermasses.jl`.
+5. Make any necessary changes to the configuration file at `WaterMassesByTMI/scripts/config_watermass_diagnostics.jl`.
 Here you can specify the input file name and the TMI version.
 
 6. Put a data file (currently requires xlsx format) into the data directory at `WaterMassesByTMI/data`.
@@ -54,7 +54,7 @@ cd("scripts") # go to the scripts directory
 include("watermassdiagnostics.jl")
 ```
 
-8. Or run it in batch mode.
+8. Or run it in batch mode by going to a command line/terminal:
 ```sh
 cd WaterMassesByTMI  # get to the root directory of the project, you may need to modify this line
 julia --project=. scripts/watermassdiagnostics.jl
