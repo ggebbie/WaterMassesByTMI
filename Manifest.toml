@@ -2,7 +2,7 @@
 
 julia_version = "1.9.0"
 manifest_format = "2.0"
-project_hash = "bf3594da6844097490af22da7e11d84f1adde157"
+project_hash = "4a7a20fbeacc874ad5b2eada4bb5278e64e6c44c"
 
 [[deps.Adapt]]
 deps = ["LinearAlgebra", "Requires"]
@@ -71,9 +71,9 @@ version = "0.1.2"
 
 [[deps.CSV]]
 deps = ["CodecZlib", "Dates", "FilePathsBase", "InlineStrings", "Mmap", "Parsers", "PooledArrays", "PrecompileTools", "SentinelArrays", "Tables", "Unicode", "WeakRefStrings", "WorkerUtilities"]
-git-tree-sha1 = "ed28c86cbde3dc3f53cf76643c2e9bc11d56acc7"
+git-tree-sha1 = "44dbf560808d49041989b8a96cae4cffbeb7966a"
 uuid = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
-version = "0.10.10"
+version = "0.10.11"
 
 [[deps.Calculus]]
 deps = ["LinearAlgebra"]
@@ -562,9 +562,9 @@ version = "2022.10.11"
 
 [[deps.NCDatasets]]
 deps = ["CFTime", "CommonDataModel", "DataStructures", "Dates", "NetCDF_jll", "NetworkOptions", "Printf"]
-git-tree-sha1 = "afd015e81e60cfbdba04ef59bcdc80e18bd613cd"
+git-tree-sha1 = "e201ed836f4486d0a5f593e68b7621b2e24237c5"
 uuid = "85f8d34a-cbdd-5861-8df4-14fed0d494ab"
-version = "0.12.14"
+version = "0.12.16"
 
 [[deps.NLSolversBase]]
 deps = ["DiffResults", "Distributed", "FiniteDiff", "ForwardDiff"]
@@ -853,10 +853,10 @@ uuid = "bea87d4a-7f5b-5778-9afe-8cc45184846c"
 version = "5.10.1+6"
 
 [[deps.TMI]]
-deps = ["CSV", "Conda", "DataFrames", "DataStructures", "Distances", "Distributions", "Downloads", "GibbsSeaWater", "GoogleDrive", "Interpolations", "LaTeXStrings", "LineSearches", "LinearAlgebra", "MAT", "NCDatasets", "NetCDF", "NetCDF_jll", "Optim", "Pkg", "Revise", "SparseArrays", "Statistics", "StatsBase", "UnicodePlots"]
+deps = ["CSV", "Conda", "DataFrames", "Distances", "Distributions", "Downloads", "GibbsSeaWater", "GoogleDrive", "Interpolations", "LaTeXStrings", "LineSearches", "LinearAlgebra", "MAT", "NCDatasets", "NetCDF", "Optim", "Pkg", "Revise", "SparseArrays", "Statistics", "StatsBase", "UnicodePlots"]
 path = "/home/gebbie/projects/TMI.jl/"
 uuid = "582500f6-28c8-4d8f-aabe-b197735ec1d4"
-version = "0.1.26"
+version = "0.1.32"
 
 [[deps.TOML]]
 deps = ["Dates"]

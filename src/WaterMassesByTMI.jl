@@ -1,8 +1,9 @@
 module WaterMassesByTMI
 
-using DrWatson, Interpolations, TMI
+using DrWatson, Interpolations, TMI, NCDatasets
 
 export watermassdiags_at_locs, watermasslist, watermasssymbols, versionlist
+export tracerlist, cubemask, maskcoords, calcite_oxygen_isotope_ratio
 
 """ 
     function watermassdiags_at_locs(params)
@@ -171,6 +172,55 @@ function tracerlist(TMIfile)
         end
     end
     return list            
+end
+
+function cubemask(lons,lats,depths,γ)
+    
+    # ternary operator to handle longitudinal wraparound
+    lons[1] ≤ 0 ? lons[1] += 360 : nothing
+    lons[2] ≤ 0 ? lons[2] += 360 : nothing
+
+    # preallocate
+    #mask = copy(γ.wet)
+    mask = γ.wet #trues(size(γ.wet))
+
+    # proceed on dimension by dimension basis.
+    for j in eachindex(γ.lat)
+        if !(lats[1] ≤ γ.lat[j] ≤ lats[2])
+            mask[:,j,:] .= false
+        end
+    end
+    for i in eachindex(γ.lon)
+        if !(lons[1] ≤ γ.lon[i] ≤ lons[2])
+            mask[i,:,:] .= false
+        end
+    end
+    for k in eachindex(γ.depth)
+        if !(depths[1] ≤ γ.depth[k] ≤ depths[2])
+            mask[:,:,k] .= false
+        end
+    end
+    return mask
+
+end
+
+function maskcoords(mask,γ)
+
+    ci = findall(mask)
+    coords = Vector{Tuple{Int,Int,Int}}(undef,length(ci))
+    [coords[i] = (γ.lon[ci[i][1]],γ.lat[ci[i][2]],γ.depth[ci[i][3]]) for i in eachindex(ci)]
+    #[latlist[i] = ci[i][2] for i in eachindex(ci)]
+    
+end
+
+function calcite_oxygen_isotope_ratio(θ::Field,d18Ow::Field; alg=:marchitto2014)
+    if alg== :marchitto2014
+        offset = 3.26*ones(θ.γ)
+        return d18Ow - 0.224*θ + offset # bemis equation 1.
+    elseif alg==:bemis
+        offset = 3.16*ones(θ.γ)
+        return d18Ow - 0.21*θ + offset # bemis equat
+    end
 end
 
 end
