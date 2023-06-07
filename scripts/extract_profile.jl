@@ -27,6 +27,9 @@ using WaterMassesByTMI
 lonprofile = -20.35
 latprofile = 61.35
 
+# or 61° 28.76 19°32.20
+latprofile = 61 + 28.76/60
+lonprofile = -(19 + 32.20/60)
 TMIversion = "modern_180x90x33_GH11_GH12"
 #################################################
 
@@ -46,6 +49,7 @@ end
 #dict_profile = Dict{String,Vector{Float64}}()
 col1 = "depth [m]"
 dictprofile = Dict(col1 => γ.depth)
+clist = tracerlist(TMIfile)
 for c in clist
     val = readfield(TMIfile,c,γ)
     cprofile = TMI.observe(val,locs,γ)
