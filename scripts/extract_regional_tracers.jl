@@ -81,37 +81,3 @@ dict = Dict(col1 => cvals, col2 => lonlist, col3 => latlist, col4 => depthlist)
 df = DataFrame(dict)
 output = datadir("Regional_"*c*"_"*TMIversion*"_Marchitto2014.csv")
 CSV.write(output, df)
-
-
-# get a profile at 61.35 N, 20.35 W.
-lonprofile = -20.35
-latprofile = 61.35
-locs = Vector{Tuple{Float64,Float64,Float64}}(undef,length(γ.depth))
-for zz = 1:length(γ.depth)
-    locs[zz] = (lonprofile,latprofile,γ.depth[zz])
-end
-
-#dict_profile = Dict{String,Vector{Float64}}()
-col1 = "depth [m]"
-dictprofile = Dict(col1 => γ.depth)
-for c in clist
-    val = readfield(TMIfile,c,γ)
-    cprofile = TMI.observe(val,locs,γ)
-    dictprofile[c] = cprofile
-end
-
-# now add d18Oc
-# print to CSV
-newcol = "δ¹⁸Oc"
-cprofile = TMI.observe(δ¹⁸Oc,locs,γ)
-dictprofile[newcol] = cprofile
-    
-df = DataFrame(dictprofile)
-if lonprofile < 0
-    output = datadir("Profile_"*string(abs(lonprofile))*"W_"*string(latprofile)*"N_"*TMIversion*".csv")
-else
-    output = datadir("Profile_"*string(lonprofile)*"E_"*string(latprofile)*"N_"*TMIversion*".csv")
-end
-
-CSV.write(output, df)
-
