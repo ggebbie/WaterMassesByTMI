@@ -1,32 +1,31 @@
 module WaterMassesByTMI
 
-using DrWatson, Interpolations, TMI, NCDatasets
+using DrWatson, Interpolations, TMI, DataFrames, NCDatasets, XLSX
 
 export watermassdiags_at_locs, watermasslist, watermasssymbols, versionlist
 export tracerlist, cubemask, maskcoords, calcite_oxygen_isotope_ratio
+export watermassdiags_at_locs, watermasslist, watermasssymbols, versionlist
+export read_locs
+export watermassdistribution, tracerlist
 
 """ 
     function watermassdiags_at_locs(params)
 
     A suite of water-mass diagnostics at the coresites
 """
-function watermassdiags_at_locs(TMIversion,Alu,γ,TMIfile,B)
-
-    # configure TMI version
-    #@unpack TMIversion, cores = params
-    #A, Alu, γ, TMIfile, L, B = config_from_nc(TMIversion)
+function watermassdiags_at_locs(TMIversion,filename)
 
     println(TMIversion)
-    nr = nrow(df)
+    A, Alu, γ, TMIfile, L, B = config_from_nc(TMIversion);
 
-    locs = Vector{Tuple{Float64,Float64,Float64}}(undef,nr)
-    for ii in 1:nr
-        locs[ii] = (df[:,:Longitude][ii],df[:,:Latitude][ii],df[:,:Depth][ii])
-    end
+    # read input Excel file into DataFrame
+    df = DataFrame(XLSX.readtable(datadir(filename),1))
+
+    locs = read_locs(df)
 
     # set up fixed diagnostic parameters
-    watermassnames = watermasslist("new")
-    #watermassnames = watermasslist()
+    watermassnames = watermasslist()
+
     nl = length(watermassnames)
 
     if !isnothing(B)
@@ -39,58 +38,59 @@ function watermassdiags_at_locs(TMIversion,Alu,γ,TMIfile,B)
     
     wmunits = " [% by mass]"
 
-    #get sp and θ, some TMI files don't have this variable, so we need to try/catch
-    try
-        Sp = readfield(TMIfile, "Sp", γ) #practical sal.
-        θ = readfield(TMIfile, "θ", γ) #potential temp
+    for wm in watermassnames
 
-        for wm in watermassnames
-            # do numerical analysis
-            #g =  watermassdistribution(TMIversion,Alu,wm,γ)
-            #output = observe(a,loc,γ)
-
-            # put three lines together. not sure it helps much. (less readable).
-            push!(output, wm*wmunits =>
-                100*observe(OPT2k.watermassdistribution(TMIversion,Alu,wm,γ,Sp,θ),locs,γ))
-            
-        end
-
-        # find all of the tracers in the TMI version, observe them at core locations.
-        clist = tracerlist(TMIfile)
-        fieldunits = TMI.fieldsatts()
-
-        for c in clist
-            cunits = " ["*fieldunits[c]["units"]*"]"
-            push!(output,c*cunits =>
-                observe(readfield(TMIfile,c,γ),locs,γ))
-        end
-
-        ## CHANGE NAME HERE TO MATCH INPUT FILE
-        fn = datadir(savename("EN539",params,"csv"))
-        println("output file name ",fn)
-        
-        # write output
-        ## CHANGE TO XLSX FORMAT
-        CSV.write(fn,hcat(cores,DataFrame(output)))
-        println("write CSV")
-        
-        merge!(params,output)
-
-        # concatenate two Dicts to save to jld2.
-        # save filename up to suffix XXXXXX
-        @tagsave(datadir(savename(filename,params,"jld2")), params)
-        println("write jld2")
-        
-    catch e
-        println("This TMI file does not have Sp or θ info")
+        # put three lines together. not sure it helps much. (less readable).
+        push!(output, wm*wmunits =>
+            100*observe(TMI.watermassdistribution(TMIversion,Alu,wm,γ),locs,γ))
     end
+
+    # find all of the tracers in the TMI version, observe them at core locations.
+    clist = tracerlist(TMIfile)
+    fieldunits = TMI.fieldsatts()
+
+    # name of practical salinity needs upstream update
+    push!(fieldunits,"Sp" => fieldunits["Sₚ"])
+
+    for c in clist
+        cunits = " ["*fieldunits[c]["units"]*"]"
+        push!(output,c*cunits =>
+            observe(readfield(TMIfile,c,γ),locs,γ))
+    end
+
+    ## CHANGE NAME HERE TO MATCH INPUT FILE
+    ## kludge to remove ".xlsx"
+    fn = datadir(filename[1:end-5]*"_"*TMIversion*".xlsx")
+    println("output file name ",fn)
+    
+    # write output
+    ## CHANGE TO XLSX FORMAT
+    isfile(fn) && mv(fn,fn*"1",force=true)
+    XLSX.writetable(fn,hcat(df,DataFrame(output)))
+    println("write XLSX output")
+    
+    # concatenate two Dicts to save to jld2.
+    fnjld = datadir(filename[1:end-5]*"_"*TMIversion*".jld2")
+    @tagsave(fnjld, output)
+    println("write jld2: Native Julia format")
     
     return nothing
 end
 
+"""
+    function read_locs(df::DataFrame)
 
-
-# Delia requested IRM and NEATL regions as well.
+    Read data locations from DataFrame.
+"""
+function read_locs(df::DataFrame)
+    nr = nrow(df)
+    
+    locs = Vector{Tuple{Float64,Float64,Float64}}(undef,nr)
+    for ii in 1:nr
+        locs[ii] = (df[:,:Longitude][ii],df[:,:Latitude][ii],df[:,:Depth][ii])
+    end
+    return locs
+end
 
 """
     function watermasslist()
@@ -101,34 +101,8 @@ watermasslist() =  ("GLOBAL","ANT","SUBANT",
             "NATL","NPAC","TROP","ARC",
             "MED","ROSS","WED","LAB","GIN",
             "ADEL","SUBANTATL","SUBANTPAC","SUBANTIND",
-                    "TROPATL","TROPPAC","TROPIND",
-                    "IRM","NEATL", "LIS")
+                    "TROPATL","TROPPAC","TROPIND")
 
-
-"""
-    function watermasslist()
-
-    Return list of possible TMI watermasses
-"""
-function watermasslist(version)
-    #has NEATL and IRM, no LIS
-    if version == "old"
-        return ("GLOBAL","ANT","SUBANT",
-            "NATL","NPAC","TROP","ARC",
-            "MED","ROSS","WED","LAB","GIN",
-            "ADEL","SUBANTATL","SUBANTPAC","SUBANTIND",
-                    "TROPATL","TROPPAC","TROPIND",
-                "IRM","NEATL")
-    #has NEATL and LIS, no IRM
-    elseif version == "new"
-        return ("GLOBAL","ANT","SUBANT",
-            "NATL","NPAC","TROP","ARC",
-            "MED","ROSS","WED","LAB","GIN",
-            "ADEL","SUBANTATL","SUBANTPAC","SUBANTIND",
-                    "TROPATL","TROPPAC","TROPIND",
-                "NEATL", "LIS")
-    end
-end
 
 """
     function watermassymbols()
@@ -139,8 +113,7 @@ watermasssymbols() =  (:GLOBAL,:ANT,:SUBANT,
             :NATL,:NPAC,:TROP,:ARC,
             :MED,:ROSS,:WED,:LAB,:GIN,
             :ADEL,:SUBANTATL,:SUBANTPAC,:SUBANTIND,
-                       :TROPATL,:TROPPAC,:TROPIND,
-                       :IRM,:NEATL, :LIS)
+                       :TROPATL,:TROPPAC,:TROPIND)
 
 """
     function versionlist()

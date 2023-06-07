@@ -39,7 +39,7 @@ Available TMI versions include:
 
 =#
 
-filename = "Holocene_AMOC_cores.xlsx"
+inputfile = "Holocene_AMOC_cores.xlsx"
 
 # Which TMI version?
 # versionlist() # will give a full list
