@@ -189,11 +189,12 @@ end
 function calcite_oxygen_isotope_ratio(θ::Field,d18Ow::Field; alg=:marchitto2014)
     if alg== :marchitto2014
         offset = 3.26*ones(θ.γ)
-        return d18Ow - 0.224*θ + offset # bemis equation 1.
+        d18Oc = d18Ow - 0.224*θ + offset # bemis equation 1.
     elseif alg==:bemis
         offset = 3.16*ones(θ.γ)
-        return d18Ow - 0.21*θ + offset # bemis equat
+        d18Oc = d18Ow - 0.21*θ + offset # bemis equat
     end
+    return Field(d18Oc.tracer,d18Oc.γ,:δ¹⁸Oc,"oxygen-18 to oxygen-16 ratio in calcite","‰ VPDB")
 end
 
 end

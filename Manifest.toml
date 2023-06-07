@@ -2,16 +2,12 @@
 
 julia_version = "1.9.0"
 manifest_format = "2.0"
-<<<<<<< HEAD
-project_hash = "4a7a20fbeacc874ad5b2eada4bb5278e64e6c44c"
-=======
-project_hash = "3e7af8e69fa737751e576d35fc0bf7a8c0a5a6ec"
+project_hash = "d9491478740801ace95ad77c73c79638581755a3"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
 uuid = "a4c015fc-c6ff-483c-b24f-f7ea428134e9"
 version = "0.0.1"
->>>>>>> 11d3aa6f9e0be649adb7ac1488960dec074dfe2b
 
 [[deps.Adapt]]
 deps = ["LinearAlgebra", "Requires"]
@@ -887,19 +883,10 @@ uuid = "bea87d4a-7f5b-5778-9afe-8cc45184846c"
 version = "5.10.1+6"
 
 [[deps.TMI]]
-<<<<<<< HEAD
 deps = ["CSV", "Conda", "DataFrames", "Distances", "Distributions", "Downloads", "GibbsSeaWater", "GoogleDrive", "Interpolations", "LaTeXStrings", "LineSearches", "LinearAlgebra", "MAT", "NCDatasets", "NetCDF", "Optim", "Pkg", "Revise", "SparseArrays", "Statistics", "StatsBase", "UnicodePlots"]
 path = "/home/gebbie/projects/TMI.jl/"
 uuid = "582500f6-28c8-4d8f-aabe-b197735ec1d4"
 version = "0.1.32"
-=======
-deps = ["CSV", "Conda", "DataFrames", "DataStructures", "Distances", "Distributions", "Downloads", "GibbsSeaWater", "GoogleDrive", "Interpolations", "LaTeXStrings", "LineSearches", "LinearAlgebra", "MAT", "NCDatasets", "NetCDF", "NetCDF_jll", "Optim", "Pkg", "Revise", "SparseArrays", "Statistics", "StatsBase", "UnicodePlots"]
-git-tree-sha1 = "21ca00408791ebfae9ad0b4cc0a295cb8b8a3d80"
-repo-rev = "extend-observe"
-repo-url = "https://github.com/ggebbie/TMI.jl"
-uuid = "582500f6-28c8-4d8f-aabe-b197735ec1d4"
-version = "0.1.28"
->>>>>>> 11d3aa6f9e0be649adb7ac1488960dec074dfe2b
 
 [[deps.TOML]]
 deps = ["Dates"]
