@@ -64,8 +64,9 @@ df = DataFrame(dictprofile)
 if lonprofile < 0
     output = datadir("Profile_"*string(abs(lonprofile))*"W_"*string(latprofile)*"N_"*TMIversion*".csv")
 else
+    # use savename instead
     output = datadir("Profile_"*string(lonprofile)*"E_"*string(latprofile)*"N_"*TMIversion*".csv")
 end
 
+# use safe write instead
 CSV.write(output, df)
-
