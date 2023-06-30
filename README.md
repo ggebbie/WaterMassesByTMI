@@ -51,13 +51,13 @@ Here you can specify the input file name and the TMI version.
 7. Run it interactively (or run it in batch mode in 8.) Start julia according to 2 above. Then:
 ```julia
 cd("scripts") # go to the scripts directory
-include("watermassdiagnostics.jl")
+include("watermass_diagnostics.jl")
 ```
 
 8. Or run it in batch mode by going to a command line/terminal:
 ```sh
 cd WaterMassesByTMI  # get to the root directory of the project, you may need to modify this line
-julia --project=. scripts/watermassdiagnostics.jl
+julia --project=. scripts/watermass_diagnostics.jl
 ```
 
 ## More information

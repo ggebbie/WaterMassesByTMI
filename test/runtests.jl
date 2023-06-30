@@ -9,6 +9,7 @@ println("Starting tests")
 ti = time()
 
 @testset "WaterMassesByTMI tests" begin
+    using TMI
     @test 1 == 1
 end
 
