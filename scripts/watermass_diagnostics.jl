@@ -11,5 +11,4 @@ using Revise
 using WaterMassesByTMI
 
 include(scriptsdir("config_watermass_diagnostics.jl"))
-
-watermassdiags_at_locs(TMIversion,inputfile)
+watermassdiags_at_locs(TMIversion,inputfile,output_filetype=output_filetype)

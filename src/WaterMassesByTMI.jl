@@ -1,6 +1,6 @@
 module WaterMassesByTMI
 
-using DrWatson, Interpolations, TMI, DataFrames, NCDatasets, XLSX
+using DrWatson, Interpolations, TMI, DataFrames, NCDatasets, XLSX, CSV
 
 export watermassdiags_at_locs, watermasslist, watermasssymbols, versionlist
 export tracerlist, cubemask, maskcoords, calcite_oxygen_isotope_ratio
@@ -13,7 +13,7 @@ export watermassdistribution, tracerlist
 
     A suite of water-mass diagnostics at the coresites
 """
-function watermassdiags_at_locs(TMIversion,filename)
+function watermassdiags_at_locs(TMIversion,filename;output_filetype="xlsx")
 
     println(TMIversion)
     A, Alu, γ, TMIfile, L, B = config_from_nc(TMIversion);
@@ -58,21 +58,39 @@ function watermassdiags_at_locs(TMIversion,filename)
             observe(readfield(TMIfile,c,γ),locs,γ))
     end
 
-    ## CHANGE NAME HERE TO MATCH INPUT FILE
-    ## kludge to remove ".xlsx"
-    fn = datadir(filename[1:end-5]*"_"*TMIversion*".xlsx")
-    println("output file name ",fn)
+    fn = datadir(replace(filename,".xlsx" => "")*"_"*TMIversion*"."*output_filetype)
+    #println("output file name ",fn)
     
     # write output
-    ## CHANGE TO XLSX FORMAT
+
+    ## make a backup of existing data (DrWatson can increment all backups, should use that instead)
     isfile(fn) && mv(fn,fn*"1",force=true)
-    XLSX.writetable(fn,hcat(df,DataFrame(output)))
-    println("write XLSX output")
+
+    # outerjoin with `on` column is probably better
+    #outerjoin(df,DataFrame(output))
+    df = hcat(df,DataFrame(output))
     
+    # DataFrame too wide to look ok in standard output
+    #df_final = hcat(df,DataFrame(output))
+    #println("Data Frame of results")
+    #println(df)
+
+    if output_filetype == "xlsx"
+        #XLSX.writetable(fn,hcat(df,DataFrame(output)))
+        XLSX.writetable(fn,df)
+        println("write XLSX output at ",fn)
+    elseif output_filetype == "csv"
+        CSV.write(fn,df)
+        println("write CSV output at ",fn)
+    end
+        
     # concatenate two Dicts to save to jld2.
-    fnjld = datadir(filename[1:end-5]*"_"*TMIversion*".jld2")
+    #fnjld = datadir(filename[1:end-5]*"_"*TMIversion*".jld2")
+    fnjld = replace(fn,output_filetype => "jld2")
+
+    #datadir(replace(filename,"."*output_filetype => "")*"_"*TMIversion*"."*output_filetype)
     @tagsave(fnjld, output)
-    println("write jld2: Native Julia format")
+    println("write jld2: Native Julia format at ",fnjld)
     
     return nothing
 end

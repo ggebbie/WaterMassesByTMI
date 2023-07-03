@@ -46,3 +46,8 @@ inputfile = "Holocene_AMOC_cores.xlsx"
 
 TMIversion = "modern_90x45x33_GH10_GH12"
 #TMIversion = "modern_180x90x33_GH11_GH12"
+println("using TMI version ",TMIversion)
+
+#output_filetype = "xlsx"
+output_filetype = "csv"
+println("using output file type ",output_filetype)
