@@ -28,6 +28,7 @@ O₂★ = preformedoxygen(TMIversion,Alu,γ)
 filename = datadir("nutrient_decomposition_"*TMIversion*".nc")
 
 # rewrite as broadcast vector
+isfile(filename) && rm(filename)
 writefield(filename,PO₄ᴿ)
 writefield(filename,PO₄★)
 writefield(filename,NO₃ᴿ)
