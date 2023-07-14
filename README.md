@@ -60,6 +60,12 @@ cd WaterMassesByTMI  # get to the root directory of the project, you may need to
 julia --project=. scripts/watermass_diagnostics.jl
 ```
 
+## Example
+
+`watermass_diagnostics.jl`: Get all water-mass diagnostics at a series of points.
+
+`nutrient_decomposition.jl`: Decompose the global nutrient fields (phosphate, nitrate, oxygen, if available) into preformed and regenerated/respired components.
+
 ## More information
 
 You may notice that most scripts start with the commands:
